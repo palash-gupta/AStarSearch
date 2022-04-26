@@ -1,6 +1,6 @@
 # Implementation of A* Search with PyGame Visualisation
 
-### Only works on Windows currently
+### Currently only works on Windows
 
 ## Installation
 
