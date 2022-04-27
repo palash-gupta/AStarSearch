@@ -52,7 +52,7 @@ def showBoard(board):
     pygame.display.update()
 
 def showPath(path):
-    for i in path[::-1]:
+    for i in path:
         if not (i == start or i == end):
             rect(window, YELLOW, (i[1] * NODESIZE, i[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
             pygame.display.update()
@@ -70,8 +70,8 @@ class Node():
     def __eq__(self, other):
         return self.position == other.position
 
-def h(start,end):
-    return (((start.position[0] - end.position[0]) ** 2) + ((start.position[1] - end.position[1]) ** 2))**0.5    
+def h(start, end):
+    return (((start.position[0] - end.position[0]) ** 2) + ((start.position[1] - end.position[1]) ** 2))**0.5
     
 def A_star(board, start, end):
     startnode = Node(None, start)
@@ -169,6 +169,10 @@ start = (0, 0)
 end = (BOARD_WIDTH - 1, BOARD_HEIGHT - 1)
 board[end[0]][end[1]] = 0
 
+rect(window, RED, (start[1] * NODESIZE, start[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
+rect(window, GREEN, (end[1] * NODESIZE, end[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
+pygame.display.update()
+
 run = True
 
 dragging = False
@@ -180,14 +184,7 @@ window.blit(resetFont, resetRect)
 window.blit(randomFont, randomRect)
 pygame.display.update()
 
-#rect(window, WHITE, (0, 0, NODESIZE * BOARD_WIDTH, NODESIZE * BOARD_HEIGHT))
-
 showBoard(board)
-
-rect(window, RED, (start[1] * NODESIZE, start[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
-rect(window, GREEN, (end[1] * NODESIZE, end[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
-pygame.display.update()
-
 
 while run:
 
@@ -244,7 +241,7 @@ while run:
                 rect(window, GREEN, (end[1] * NODESIZE, end[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
                 showBoard(board)
             elif currentX >= 750 and currentX <= 820 and currentY >= 115 and currentY <= 150:
-                board = [[(1 if random.randint(0, RANDOM_CONST) == 0 else 0) for i in range(BOARD_WIDTH)] for j in range(BOARD_HEIGHT)]
+                board = [[random.randint(0, 1) for i in range(BOARD_WIDTH)] for j in range(BOARD_HEIGHT)]
                 board[0][0] = 0
                 board[BOARD_WIDTH - 1][BOARD_HEIGHT - 1] = 0
                 start = (0, 0)
