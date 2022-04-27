@@ -155,10 +155,6 @@ start = (0, 0)
 end = (BOARD_WIDTH - 1, BOARD_HEIGHT - 1)
 board[end[0]][end[1]] = 0
 
-rect(window, RED, (start[1] * NODESIZE, start[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
-rect(window, GREEN, (end[1] * NODESIZE, end[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
-pygame.display.update()
-
 run = True
 
 dragging = False
@@ -170,7 +166,14 @@ window.blit(resetFont, resetRect)
 window.blit(randomFont, randomRect)
 pygame.display.update()
 
+#rect(window, WHITE, (0, 0, NODESIZE * BOARD_WIDTH, NODESIZE * BOARD_HEIGHT))
+
 showBoard(board)
+
+rect(window, RED, (start[1] * NODESIZE, start[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
+rect(window, GREEN, (end[1] * NODESIZE, end[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
+pygame.display.update()
+
 
 while run:
 
