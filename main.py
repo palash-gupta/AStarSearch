@@ -8,14 +8,15 @@ pygame.init()
 
 WIDTH = 900
 HEIGHT = 750
-VWIDTH = 685
+VWIDTH = 740
+VHEIGHT = 740
 DIMENSIONS = (WIDTH, HEIGHT)
 NODESIZE = 20
 
 BOARD_WIDTH = 37
 BOARD_HEIGHT = 37
 
-RANDOM_CONST = 1
+RANDOM_CONST = 5
 
 BLACK  = (  0,   0,   0)
 WHITE  = (255, 255, 255)
@@ -58,7 +59,6 @@ def showPath(path):
             time.sleep(0.02)
 
 
-
 class Node():
     def __init__(self, parent=None, position=None):
         self.parent = parent
@@ -71,7 +71,7 @@ class Node():
         return self.position == other.position
 
 def h(start,end):
-    return (((start.position[0] - end.position[0]) ** 2) + ((start.position[1] - end.position[1]) ** 2))**0.5
+    return (((start.position[0] - end.position[0]) ** 2) + ((start.position[1] - end.position[1]) ** 2))**0.5    
     
 def A_star(board, start, end):
     startnode = Node(None, start)
@@ -102,7 +102,7 @@ def A_star(board, start, end):
         if not (currentnode.position == start or currentnode.position == end):
             rect(window, BLUE, (currentnode.position[1] * NODESIZE, currentnode.position[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
             pygame.display.update()
-            time.sleep(0.01)
+            #time.sleep(0.01)
         else:
             rect(window, RED, (start[1] * NODESIZE, start[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
             rect(window, GREEN, (end[1] * NODESIZE, end[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
@@ -132,22 +132,34 @@ def A_star(board, start, end):
                
             if board[nodepos[0]][nodepos[1]] != 0:
                 continue
+
+            if newpos == (-1, -1):
+                if board[nodepos[0] + 1][nodepos[1]] != 0 and board[nodepos[0]][nodepos[1] + 1] != 0:
+                    continue
+            if newpos == (-1, 1):
+                if board[nodepos[0]][nodepos[1] - 1] != 0 and board[nodepos[0] + 1][nodepos[1]] != 0:
+                    continue
+            if newpos == (1, -1):
+                if board[nodepos[0] - 1][nodepos[1]] != 0 and board[nodepos[0]][nodepos[1] + 1] != 0:
+                    continue
+            if newpos == (1, 1):
+                if board[nodepos[0] - 1][nodepos[1]] != 0 and board[nodepos[0]][nodepos[1] - 1] != 0:
+                    continue
             
             newnode = Node(currentnode, nodepos)
             children.append(newnode)
 
         for child in children:
-            if len([closedchild for closedchild in closedlist if closedchild == child]) >0:
+            if len([closedchild for closedchild in closedlist if closedchild.position == child.position]) >0:
                 continue
 
-            child.gcost = currentnode.gcost + 1
+            child.gcost = currentnode.gcost + h(child,currentnode)
             child.hcost = h(child,endnode)
             child.fcost = child.gcost + child.hcost
 
 
-            if len([opennode for opennode in openlist if child.position == opennode.position and child.fcost > opennode.fcost]) > 0:
+            if len([opennode for opennode in openlist if child.position == opennode.position and child.fcost >= opennode.fcost]) > 0:
                 continue
-
             openlist.append(child)
 
        
@@ -179,7 +191,7 @@ pygame.display.update()
 
 while run:
 
-    pygame.time.delay(90)
+    pygame.time.delay(160)
 
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -195,7 +207,7 @@ while run:
 
     if dragging:
         currentX, currentY = pygame.mouse.get_pos()[0], pygame.mouse.get_pos()[1]
-        if currentX < VWIDTH:
+        if currentX < VWIDTH and currentY < VHEIGHT:
             if startDrag:
                 board[start[0]][start[1]] = 0
                 rect(window, GREY, (start[1] * NODESIZE, start[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
