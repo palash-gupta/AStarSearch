@@ -15,6 +15,8 @@ NODESIZE = 20
 BOARD_WIDTH = 37
 BOARD_HEIGHT = 37
 
+RANDOM_CONST = 1
+
 BLACK  = (  0,   0,   0)
 WHITE  = (255, 255, 255)
 GREEN  = ( 39, 249,  48)
@@ -49,7 +51,7 @@ def showBoard(board):
     pygame.display.update()
 
 def showPath(path):
-    for i in path:
+    for i in path[::-1]:
         if not (i == start or i == end):
             rect(window, YELLOW, (i[1] * NODESIZE, i[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
             pygame.display.update()
@@ -100,7 +102,7 @@ def A_star(board, start, end):
         if not (currentnode.position == start or currentnode.position == end):
             rect(window, BLUE, (currentnode.position[1] * NODESIZE, currentnode.position[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
             pygame.display.update()
-            #time.sleep(0.01)
+            time.sleep(0.01)
         else:
             rect(window, RED, (start[1] * NODESIZE, start[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
             rect(window, GREEN, (end[1] * NODESIZE, end[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
@@ -138,7 +140,7 @@ def A_star(board, start, end):
             if len([closedchild for closedchild in closedlist if closedchild == child]) >0:
                 continue
 
-            child.gcost = currentnode.gcost + h(child,endnode)
+            child.gcost = currentnode.gcost + 1
             child.hcost = h(child,endnode)
             child.fcost = child.gcost + child.hcost
 
@@ -230,7 +232,7 @@ while run:
                 rect(window, GREEN, (end[1] * NODESIZE, end[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
                 showBoard(board)
             elif currentX >= 750 and currentX <= 820 and currentY >= 115 and currentY <= 150:
-                board = [[random.randint(0, 1) for i in range(BOARD_WIDTH)] for j in range(BOARD_HEIGHT)]
+                board = [[(1 if random.randint(0, RANDOM_CONST) == 0 else 0) for i in range(BOARD_WIDTH)] for j in range(BOARD_HEIGHT)]
                 board[0][0] = 0
                 board[BOARD_WIDTH - 1][BOARD_HEIGHT - 1] = 0
                 start = (0, 0)
