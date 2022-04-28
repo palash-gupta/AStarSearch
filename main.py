@@ -18,7 +18,7 @@ NODESIZE = 20
 BOARD_WIDTH = 37
 BOARD_HEIGHT = 37
 
-RANDOM_CONST = sys.argv[2] if len(sys.argv) >= 3 else 3
+RANDOM_CONST = int(sys.argv[2]) if len(sys.argv) >= 3 else 3
 
 BLACK  = (  0,   0,   0)
 WHITE  = (255, 255, 255)
@@ -26,8 +26,8 @@ GREEN  = ( 39, 249,  48)
 RED    = (250,  37,  26)
 GREY   = ( 51,  51,  51)
 LGREY  = (100, 100, 100)
-BLUE   = ( 66,  98, 249)
-YELLOW = (255, 255,   0)
+BLUE   = (107, 172, 242)
+PURPLE = (132,  48, 217)
 
 window = pygame.display.set_mode(DIMENSIONS)
 window.fill(BLACK)
@@ -56,9 +56,9 @@ def showBoard(board):
 def showPath(path):
     for i in path[::-1]:
         if not (i == start or i == end):
-            #rect(window, YELLOW, (i[1] * NODESIZE, i[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))       
-            gfxdraw.filled_circle(window, i[1] * NODESIZE + NODESIZE // 2 - 1, i[0] * NODESIZE + NODESIZE // 2 - 1, NODESIZE // 2 - 2, YELLOW)
-            gfxdraw.aacircle(window, i[1] * NODESIZE + NODESIZE // 2 - 1, i[0] * NODESIZE + NODESIZE // 2 - 1, NODESIZE // 2 - 2, YELLOW)
+            #rect(window, PURPLE, (i[1] * NODESIZE, i[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))       
+            gfxdraw.filled_circle(window, i[1] * NODESIZE + NODESIZE // 2 - 1, i[0] * NODESIZE + NODESIZE // 2 - 1, NODESIZE // 2 - 2, PURPLE)
+            gfxdraw.aacircle(window, i[1] * NODESIZE + NODESIZE // 2 - 1, i[0] * NODESIZE + NODESIZE // 2 - 1, NODESIZE // 2 - 2, PURPLE)
             pygame.display.update()
             time.sleep(0.04 if len(sys.argv) >= 2 and sys.argv[1] == '-s' else 0.02)
 
@@ -184,7 +184,7 @@ window.blit(resetFont, resetRect)
 window.blit(randomFont, randomRect)
 pygame.display.update()
 
-#rect(window, WHITE, (0, 0, NODESIZE * BOARD_WIDTH, NODESIZE * BOARD_HEIGHT))
+rect(window, LGREY, (0, 0, NODESIZE * BOARD_WIDTH, NODESIZE * BOARD_HEIGHT))
 
 showBoard(board)
 
