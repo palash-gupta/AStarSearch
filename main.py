@@ -1,8 +1,10 @@
 import pygame
+from pygame import gfxdraw
 from pygame.draw import *
 import time
 import random
 import ctypes
+import sys
 
 pygame.init()
 
@@ -16,7 +18,7 @@ NODESIZE = 20
 BOARD_WIDTH = 37
 BOARD_HEIGHT = 37
 
-RANDOM_CONST = 3
+RANDOM_CONST = sys.argv[2] if len(sys.argv) >= 3 else 3
 
 BLACK  = (  0,   0,   0)
 WHITE  = (255, 255, 255)
@@ -54,9 +56,11 @@ def showBoard(board):
 def showPath(path):
     for i in path[::-1]:
         if not (i == start or i == end):
-            rect(window, YELLOW, (i[1] * NODESIZE, i[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
+            #rect(window, YELLOW, (i[1] * NODESIZE, i[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))       
+            gfxdraw.filled_circle(window, i[1] * NODESIZE + NODESIZE // 2 - 1, i[0] * NODESIZE + NODESIZE // 2 - 1, NODESIZE // 2 - 2, YELLOW)
+            gfxdraw.aacircle(window, i[1] * NODESIZE + NODESIZE // 2 - 1, i[0] * NODESIZE + NODESIZE // 2 - 1, NODESIZE // 2 - 2, YELLOW)
             pygame.display.update()
-            time.sleep(0.02)
+            time.sleep(0.04 if len(sys.argv) >= 2 and sys.argv[1] == '-s' else 0.02)
 
 
 class Node():
@@ -75,12 +79,12 @@ def h(start,end):
     
 def A_star(board, start, end):
     startnode = Node(None, start)
-    startnode.gcost =0
-    startnode.hcost =0
+    startnode.gcost = 0
+    startnode.hcost = 0
     startnode.fcost = 0
     endnode = Node(None, end)
-    startnode.gcost =0
-    startnode.hcost =0
+    startnode.gcost = 0
+    startnode.hcost = 0
     startnode.fcost = 0
 
     openlist = []
@@ -102,7 +106,7 @@ def A_star(board, start, end):
         if not (currentnode.position == start or currentnode.position == end):
             rect(window, BLUE, (currentnode.position[1] * NODESIZE, currentnode.position[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
             pygame.display.update()
-            #time.sleep(0.01)
+            time.sleep(0.01 if len(sys.argv) >= 2 and sys.argv[1] == '-s' else 0)
         else:
             rect(window, RED, (start[1] * NODESIZE, start[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))
             rect(window, GREEN, (end[1] * NODESIZE, end[0] * NODESIZE, NODESIZE - 1, NODESIZE - 1))

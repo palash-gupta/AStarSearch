@@ -12,6 +12,12 @@ pip install -r requirements.txt
 
 ## Run
 
+for slowmode
+```
+python main.py -s
+```
+
+for normal speed
 ```
 python main.py
 ```
